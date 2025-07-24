@@ -73,10 +73,10 @@ exports.LoginPage = class LoginPage {
     await highlightElement(this.page,this.passwordInputFiled)
     await this.fillingUserPassword(pwd);
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
-     await highlightElement(this.page,this.submitButton);
+    await highlightElement(this.page,this.submitButton);
     await this.clickOnSubmitButton();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
-     await highlightElement(this.page,this.submitButton);
+    await highlightElement(this.page,this.submitButton);
     await this.clickOnSubmitButton();
   };
 };

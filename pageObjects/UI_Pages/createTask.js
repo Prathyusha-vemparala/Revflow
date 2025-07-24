@@ -1,5 +1,5 @@
 const { excuteSteps } = require("../../utilities/actions");
-const { renameFile } = require("../../utilities/renameFile");
+const { renameFile,invalidrenameFile } = require("../../utilities/renameFile");
 const { expect } = require("@playwright/test");
 const {
   highlightElement,
@@ -40,6 +40,7 @@ let taskTitleAtt = `FTask_${timeStamp}`;
 let rename = `rename_${timeStamp}`;
 let tname = `Vyaghram`;
 let invalidDate = `2066/21/12`;
+let exp='svg';
 exports.CreateTaskPage = class CreateTaskPage {
   constructor(test, page) {
     this.test = test;
@@ -174,7 +175,14 @@ exports.CreateTaskPage = class CreateTaskPage {
       "//h2[contains(text(),'You have unsaved changes')]"
     );
     this.continueBtn = page.locator("//span[text()=' Continue ']");
+    this.commentfield=page.locator("//div[@data-placeholder='Add comment...']");
+    this.commenterrmsg=page.locator("//div[text()=' 500 max number of characters exceeded. ']");
+    this.discriptionInputFiled = page.locator("//div[@data-placeholder='Add a description...']");
+    this.descriptionerrmsg=page.locator("//div[text()=' 500 max number of characters exceeded. ']");
+    this.errMessage=page.locator("//div[contains(text(), ' Value should end ')]");
   }
+
+
   clickOnSaveBtn = async () => {
     await excuteSteps(this.test, this.saveBtn, "click", `Click on save button`);
   };
@@ -582,6 +590,30 @@ exports.CreateTaskPage = class CreateTaskPage {
     );
   };
 
+
+
+  fillCommentDescription = async (txt) => {
+    await excuteSteps(
+      this.test,
+      this.commentfield,
+      "fill",
+      `Fill description ${txt}`,
+      txt
+    );
+  };
+ 
+ 
+  fillTaskDescription = async (txt) => {
+      await excuteSteps(
+        this.test,
+        this.discriptionInputFiled,
+        "fill",
+        `Fill description ${txt}`,
+        txt
+        );
+    };
+
+
   CreateTaskWithAttachment = async () => {
     await this.fillFieldsForCreateTask();
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
@@ -592,14 +624,13 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.clickDocumentTypdrop();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.SearchDropdownOptions([docTypesList]);
-    await this.page.waitForTimeout(parseInt(process.env.mediumWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
+    //await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.selectDropdownOptions();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    //await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnAttachBtn();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.clickOnSaveTaskButton();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await expect(this.sucessMessage).toBeVisible();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.clickOnTaskCloseButton();
@@ -610,9 +641,6 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.searchfilterInputFiled([taskTitle]);
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.clickOnApplyBtn();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
   };
 
   fillFieldsForCreateTask = async () => {
@@ -626,24 +654,18 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.clickOnCreateTaskBtn();
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.fillTasktitle([taskTitle]);
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.fillTaskDescription([
       testData.RevflowData.addTaskData.discription,
     ]);
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    //await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnBalanceStatusdrop();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.SearchDropdownOptions([randomPickBalanceStatusOptions]);
-    await this.page.waitForTimeout(parseInt(process.env.mediumWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.selectDropdownOptions();
-    await this.page.waitForTimeout(parseInt(process.env.mediumWait));
+    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.clicOnRootIssuedrop();
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.SearchDropdownOptions([randomPickRootIssuesOptions]);
-    await this.page.waitForTimeout(parseInt(process.env.mediumWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.selectDropdownOptions();
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnDueDatedropdown();
@@ -655,7 +677,6 @@ exports.CreateTaskPage = class CreateTaskPage {
 
   CreateTaskWithoutAttachmentDefaultUser = async () => {
     await this.fillFieldsForCreateTask();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnSaveTaskButton();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await expect(this.sucessMessage).toBeVisible();
@@ -668,19 +689,13 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.searchfilterInputFiled([taskTitle]);
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.clickOnApplyBtn();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
   };
 
   CreateTaskWithoutAttachmentSelectedUser = async () => {
     await this.fillFieldsForCreateTask();
     await this.selectAssignedUser();
     await this.SearchDropdownOptions([randomPickAssignedUserOptions]);
-    await this.page.waitForTimeout(parseInt(process.env.mediumWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.selectDropdownOptions();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnSaveTaskButton();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await expect(this.sucessMessage).toBeVisible();
@@ -693,9 +708,6 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.searchfilterInputFiled([taskTitle]);
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.clickOnApplyBtn();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
   };
 
   uploadFileUsingBrowser = async () => {
@@ -709,24 +721,17 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.clickOnCreateTaskBtn();
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.fillTasktitle([taskTitleAtt]);
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.fillTaskDescription([
       testData.RevflowData.addTaskData.discription,
     ]);
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnBalanceStatusdrop();
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.SearchDropdownOptions([randomPickBalanceStatusOptions]);
-    await this.page.waitForTimeout(parseInt(process.env.mediumWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.selectDropdownOptions();
     await this.page.waitForTimeout(parseInt(process.env.mediumWait));
     await this.clicOnRootIssuedrop();
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.SearchDropdownOptions([randomPickRootIssuesOptions]);
-    await this.page.waitForTimeout(parseInt(process.env.mediumWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.selectDropdownOptions();
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnDueDatedropdown();
@@ -735,9 +740,7 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.selectMonthFromCalendar();
     await this.selectDateFromCalendar();
     await this.clickOnAddFilebtn();
-    const file = path.resolve(
-      "C:/Users/PrathyushaVemparala/Reports_publish/files/kane.png"
-    );
+    const file = path.resolve(__dirname, "../../files/kane.png");
     await this.UploadFileInput.setInputFiles(file);
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.clickOnDocumentType();
@@ -769,8 +772,6 @@ exports.CreateTaskPage = class CreateTaskPage {
         await this.clickoneditDocType();
         await this.page.waitForTimeout(parseInt(process.env.smallWait));
         await this.SearchDropdownOptions([docTypesList]);
-        await this.page.waitForTimeout(parseInt(process.env.mediumWait));
-
         await this.page.waitForTimeout(parseInt(process.env.smallWait));
         await this.selectDropdownOptions();
         await this.clickOnSaveBtn();
@@ -798,12 +799,14 @@ exports.CreateTaskPage = class CreateTaskPage {
 
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     const count = await this.linkfileList.count();
-    console.log(count);
+    console.log("cont=",count);
     if (count > 0) {
       let randomIndex = Math.floor(Math.random() * count);
-      if (randomIndex === 1 && count > 2) {
+      console.log(randomIndex);
+      if (randomIndex === 1) {
         randomIndex = 2;
       }
+      console.log(randomIndex);
       const randomCheckbox = this.linkfileList.nth(randomIndex);
       await randomCheckbox.click();
     }
@@ -837,7 +840,6 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.hoverTaskNameHeader();
     await this.clickOnTaskNameFilter();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
-    await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.searchfilterNameInput([
       testData.RevflowData.addTaskData.namefilter,
     ]);
@@ -845,7 +847,6 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.clickOnApplyBtn();
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnExistingTask();
-    await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnAddFilebtn();
     const file = path.resolve(__dirname, "../files/506mb.pdf");
@@ -902,11 +903,11 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.page.waitForTimeout(parseInt(process.env.largeWait));
     await this.clickOnSaveTaskButton();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
-    await expect(this.emptyTaskMessage).toBeVisible();
-    await expect(this.emptyTaskName).toBeVisible();
-    await expect(this.emptyBalance).toBeVisible();
-    await expect(this.emptyRootIssue).toBeVisible();
-    await expect(this.emptyDueDate).toBeVisible();
+    await expect(this.emptyTaskMessage,"Verifying if it is throwing error for empty task message").toBeVisible();
+    await expect(this.emptyTaskName,"Verifying if it is throwing error for empty task name").toBeVisible();
+    await expect(this.emptyBalance,"Verifying if it is throwing error for empty balance ").toBeVisible();
+    await expect(this.emptyRootIssue,"Verifying if it is throwing error for empty root issue").toBeVisible();
+    await expect(this.emptyDueDate,"Verifying if it is throwing error for empty due date").toBeVisible();
     await this.navigateBackToTaskListBtn.click();
   };
   searchFieldsValidation = async () => {
@@ -924,13 +925,13 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.SearchDropdownOptions([data.additionalneeds]);
     await this.page.waitForTimeout(parseInt(process.env.mediumWait));
-    await expect(this.selectOptions).not.toBeVisible();
+    await expect(this.selectOptions,"Verifying if option is not visible").not.toBeVisible();
     await this.page.keyboard.press("Escape");
     await this.clicOnRootIssuedrop();
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
     await this.SearchDropdownOptions([data.additionalneeds]);
     await this.page.waitForTimeout(parseInt(process.env.smallWait));
-    await expect(this.selectOptions).not.toBeVisible();
+    await expect(this.selectOptions,"Verifying if option is not available").not.toBeVisible();
     await this.page.keyboard.press("Escape");
   };
 
@@ -946,15 +947,150 @@ exports.CreateTaskPage = class CreateTaskPage {
     await this.dbClickDueDateField();
     await this.fillDueDate([invalidDate]);
     await this.clickOnFileHeader();
-    await expect(this.emptyDueDate).toBeVisible();
+    await expect(this.emptyDueDate,"Verifying if error message is displayed invalid date").toBeVisible();
   };
 
   fillFieldsCancelValidation = async () => {
     await this.fillFieldsForCreateTask();
     await this.clickOnCancelBtn();
-    await expect(this.cancelTaskHeader).toBeVisible();
+    await expect(this.cancelTaskHeader,"Verifying if cancel button is visible").toBeVisible();
     await this.clickOnContinueBtn();
     await this.page.waitForTimeout(parseInt(process.env.extraLargeWait));
-    await expect(this.createTaskBtn).toBeVisible();
+    await expect(this.createTaskBtn,"Verifying if create task button is visible").toBeVisible();
   };
+
+
+
+  commentsFieldValidation= async()=>{
+    this.test.step("", async () => {
+     await this.page.waitForTimeout(parseInt(process.env.largeWait));
+   });
+   await this.clickOnTaskList();
+   await this.page.waitForTimeout(parseInt(process.env.extraLargeWait));
+   await this.clearAllFiltersFeature();
+   await this.page.waitForTimeout(parseInt(process.env.largeWait));
+   await this.clickOnCreateTaskBtn();
+   await this.page.waitForTimeout(parseInt(process.env.largeWait));
+   await this.fillCommentDescription([
+     testData.RevflowData.extentinputfield.value,
+   ]); 
+   await this.page.waitForTimeout(parseInt(process.env.largeWait));  
+   await expect(this.commenterrmsg,"Verifying if error message is displayed for exceeding character count").toBeVisible();
+   };
+
+
+   descriptionFieldValidation= async()=>{
+    this.test.step("", async () => {
+    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    });
+    await this.clickOnTaskList();
+    await this.page.waitForTimeout(parseInt(process.env.extraLargeWait));
+    await this.clearAllFiltersFeature();
+    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    await this.clickOnCreateTaskBtn();
+    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    await this.fillTasktitle([taskTitleAtt]);
+    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    await this.fillTaskDescription([
+      testData.RevflowData.extentinputfield.value,
+    ]); 
+    await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    await this.clickOnBalanceStatusdrop();
+    await expect(this.descriptionerrmsg,"Verifying if error message is displayed for exceeding character count").toBeVisible();
+ 
+  };
+
+
+  enterInvalidFileExtension= async () => {
+    this.test.step("", async () => {
+      await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    });
+    await this.clickOnTaskList();
+    await this.page.waitForTimeout(parseInt(process.env.extraLargeWait));
+    await this.clearAllFiltersFeature();
+    await this.page.waitForTimeout(parseInt(process.env.extraLargeWait));
+    const count= await this.taskNamecolumn.count();
+    for (let i = 1; i < count; i++) {
+      await this.page.waitForTimeout(parseInt(process.env.largeWait));
+      const task= this.taskNamecolumn.nth(i);
+      await task.click();
+      await this.page.waitForTimeout(parseInt(process.env.mediumWait));
+      if(await this.filesPresent.isVisible()){
+          await this.clickOnfileNameEditIcon();
+          await this.page.waitForTimeout(parseInt(process.env.smallWait));
+          const x =await invalidrenameFile(this.page,this.fileNameField,[rename]);
+          await this.editFileName([x]);
+          await this.clickoneditDocType();
+          await this.page.waitForTimeout(parseInt(process.env.smallWait));
+          await this.SearchDropdownOptions([docTypesList]);
+          await this.page.waitForTimeout(parseInt(process.env.smallWait));
+          await this.selectDropdownOptions();
+          await this.page.waitForTimeout(parseInt(process.env.smallWait));
+          await expect(this.errMessage,"Verifying if error message is displayed for invalid file extension").toBeVisible();
+          break;
+        }
+    }
+  };
+
+
+  editFileInputBox = async () => {
+    await this.fillFieldsForCreateTask();
+    await this.clickOnAddFilebtn();
+    await this.clickonLinkFromCaseBtn();
+    await this.page.waitForTimeout(parseInt(process.env.smallWait));
+    const count=await this.linkfileList.count();
+    console.log(count);
+    if (count > 0) {
+      let randomIndex = Math.floor(Math.random() *count);
+      if(randomIndex === 1 && count > 2) {randomIndex=2;}
+      const randomCheckbox = this.linkfileList.nth(randomIndex);
+      await randomCheckbox.click();
+    }
+    const linkfileselector= this.checkedLinkFiles ;
+    const originalFileName = await linkfileselector.innerText();
+    console.log("Original File Name:", originalFileName);
+    await this.clickOnLinkBtn();
+    await this.clickOnfileNameEditIcon();
+    await this.editFileName([exp]);
+    await this.clickoneditDocType();
+    await this.page.waitForTimeout(parseInt(process.env.smallWait));
+    await this.SearchDropdownOptions([docTypesList]);
+    await this.page.waitForTimeout(parseInt(process.env.smallWait));
+    await this.selectDropdownOptions();
+    await expect(this.errMessage).toBeVisible();
+  };
+
+  enterInvalidFileExtension1= async () => {
+    this.test.step("", async () => {
+      await this.page.waitForTimeout(parseInt(process.env.largeWait));
+    });
+    await this.clickOnTaskList();
+    await this.page.waitForTimeout(parseInt(process.env.extraLargeWait));
+    await this.clearAllFiltersFeature();
+    await this.page.waitForTimeout(parseInt(process.env.extraLargeWait));
+    const count= await this.taskNamecolumn.count();
+    for (let i = 1; i < count; i++) {
+      await this.page.waitForTimeout(parseInt(process.env.largeWait));
+      //nth playwright element to return current index
+      const task= this.taskNamecolumn.nth(i);
+      await task.click();
+      await this.page.waitForTimeout(parseInt(process.env.mediumWait));
+      if(await this.filesPresent.isVisible()){
+          await this.clickOnfileNameEditIcon();
+          await this.page.waitForTimeout(parseInt(process.env.smallWait));
+          const x =await invalidrenameFile(this.page,this.fileNameField,[rename]);
+          await this.editFileName([x]);
+          await this.clickoneditDocType();
+          await this.page.waitForTimeout(parseInt(process.env.smallWait));
+          await this.SearchDropdownOptions([docTypesList]);
+          await this.page.waitForTimeout(parseInt(process.env.smallWait));
+          await this.selectDropdownOptions();
+          await this.page.waitForTimeout(parseInt(process.env.smallWait));
+          await expect(this.errMessag).toBeVisible();
+          break;
+        }
+    }
+  };
+
+
 };
