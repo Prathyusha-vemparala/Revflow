@@ -801,7 +801,7 @@ exports.CreateTaskPage = class CreateTaskPage {
     const count = await this.linkfileList.count();
     console.log("cont=",count);
     if (count > 0) {
-      let randomIndex = Math.floor(Math.random() * count);
+      let randomIndex = Math.floor(Math.random() * (count - 1)) + 1;
       console.log(randomIndex);
       if (randomIndex === 1) {
         randomIndex = 2;
