@@ -1,0 +1,89 @@
+
+    <html>
+      <head>
+        <title>Playwright Test Execution Report</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+          }
+          h1, h2 {
+            color: #333;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          }
+          th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+          }
+          th {
+            background-color: #f4f4f4;
+          }
+          tr:hover {
+            background-color: #f1f1f1;
+          }
+          a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>📊 Playwright Test Execution Report</h1>
+        <h2>Summary</h2>
+        <p><strong>Total Scenarios:</strong> 1 | ✅ Passed: 1 | ❌ Failed: 0 | ⚠️ Skipped: 0</p>
+        <canvas id="chart" width="200" height="200"></canvas>
+        <script>
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Passed', 'Failed', 'Skipped'],
+        datasets: [{
+          data: [1, 0, 0],
+          backgroundColor: ['#4CAF50', '#F44336', '#FF9800']
+        }]
+      },
+      options: { responsive: false }
+    });
+  </script>
+        <h2>Detailed Results</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Test Scenario Name</th>
+              <th>Status</th>
+              <th>Total</th>
+              <th>Passed</th>
+              <th>Failed</th>
+              <th>Skipped</th>
+              <th>Duration (ms)</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+      <tr>
+        <td><a href="create_task_without_attachment_default_user_.html">Create Task without attachment default user </a></td>
+        <td>✅️</td>
+        <td>1</td>
+        <td>1</td>
+        <td>0</td>
+        <td>0</td>
+        <td>97238</td>
+      </tr>
+    
+          </tbody>
+        </table>
+      </body>
+    </html>
+  

@@ -11,4 +11,14 @@ async function renameFile(page,element,rename){
     console.log("what does parts have",parts);
     return newfileName;
 }
-module.exports={renameFile};
+
+
+async function invalidrenameFile(page,element,rename){
+    const fileName=await element.inputValue();
+    const parts=fileName.split('.');
+    const extension=parts.pop();
+    const newExtension=extension.toUpperCase();
+    const newfileName=`${rename}.${newExtension}`;
+    return newfileName;
+}
+module.exports={renameFile,invalidrenameFile};
