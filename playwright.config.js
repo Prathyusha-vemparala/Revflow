@@ -17,7 +17,7 @@ const path = require('path');
  */
 export default defineConfig({
   testDir: "./tests",
-  timeout: 90 * 60 * 1000,
+  timeout: 3* 60 * 1000,
   /* Deletes the existing allure report files before test execution*/
   globalSetup: require.resolve("./global_setup.js"),
   /* Run tests in files in parallel */
