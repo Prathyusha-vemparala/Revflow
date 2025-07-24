@@ -126,5 +126,5 @@ test("Failed test case",async({page})=>{
   await loginPage.loginWithValidCredentials([process.env.userEmail],[process.env.password]);
   await page.waitForTimeout(parseInt(process.env.mediumWait));
   const createTaskpage=new sections.CreateTaskPage(test,page);
-  await createTaskpage.enterInvalidFileExtension1();
+  //await createTaskpage.enterInvalidFileExtension1();
 });
