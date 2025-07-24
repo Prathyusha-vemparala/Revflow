@@ -1,0 +1,4 @@
+file is rename_2025-07-23T11:52.png
+extension is  png
+new file name is  rename_2025-07-23T11:57.png
+what does parts have [ 'rename_2025-07-23T11:52' ]

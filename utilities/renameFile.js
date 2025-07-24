@@ -1,0 +1,14 @@
+const { log } = require("console");
+
+async function renameFile(page,element,rename){
+    const fileName=await element.inputValue();
+    const parts=fileName.split('.');
+    const extension=parts.pop();
+    const newfileName=`${rename}.${extension}`;
+    console.log("file is",fileName);
+    console.log("extension is ",extension);
+    console.log("new file name is ",newfileName);
+    console.log("what does parts have",parts);
+    return newfileName;
+}
+module.exports={renameFile};
