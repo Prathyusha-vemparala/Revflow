@@ -4,7 +4,7 @@ const testData = require("../test_Data/testData.json");
 
 require("dotenv").config();
 
-test.only("Create Task without attachment default user ", async ({ page }) => {
+test("Create Task without attachment default user ", async ({ page }) => {
   const loginPage = new sections.LoginPage(test, page);
   await loginPage.launchingApplication([process.env.baseURL]);
   await loginPage.loginWithValidCredentials(
